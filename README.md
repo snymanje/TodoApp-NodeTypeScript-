@@ -1,1 +1,1 @@
-﻿# TodoApp - Build with Node, express, mongoose and TypeScript.
+﻿# TodoApp - Build with Node, Express, Mongoose and TypeScript.
