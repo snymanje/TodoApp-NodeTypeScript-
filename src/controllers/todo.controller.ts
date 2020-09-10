@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 
 import ITodo from '../models/todo';
+import { ITodoDto } from '../interfaces/todo';
 
 const getTodos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const results = await ITodo.findById(req.body.id);
+    const reqData: ITodoDto = req.body;
+    const results = await ITodo.findById(reqData.id);
     if (results) res.status(200).json(results);
 
     res.status(400).json({
@@ -21,7 +23,8 @@ const getTodos = async (req: Request, res: Response): Promise<void> => {
 
 const createTodo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const item = await ITodo.create({ description: req.body['description'] });
+    const reqData: ITodoDto = req.body;
+    const item = await ITodo.create({ description: reqData.description });
     await item.save();
     res.status(200).json({
       status: 'Success',
@@ -38,7 +41,8 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
 
 const updateTodos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const todo = await ITodo.findById(req.body.id);
+    const reqData: ITodoDto = req.body;
+    const todo = await ITodo.findById(reqData.id);
     if (!todo) {
       res.status(400).json({
         status: 'failed',
@@ -62,7 +66,8 @@ const updateTodos = async (req: Request, res: Response): Promise<void> => {
 
 const deleteTodo = async (req: Request, res: Response): Promise<void> => {
   try {
-    await ITodo.findByIdAndDelete(req.body.id);
+    const reqData: ITodoDto = req.body;
+    await ITodo.findByIdAndDelete(reqData.id);
 
     res.status(200).json({
       status: 'sucess',

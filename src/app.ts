@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 import { router } from './routes/todo.router';
 
 import cors from 'cors';
@@ -15,7 +15,7 @@ app.use(bodyparser.json());
 
 app.use(requestLogger);
 
-app.get('/', function (req, res) {
+app.get('/', (res: Response): void => {
   res.sendFile(path.join(__dirname + '/public/docs.html'));
 });
 
