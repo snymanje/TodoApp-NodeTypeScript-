@@ -19,6 +19,6 @@ app.get('/', (res: Response): void => {
   res.sendFile(path.join(__dirname + '/public/docs.html'));
 });
 
-app.use('/', router);
+app.use('/Todos', router);
 
 export { app };

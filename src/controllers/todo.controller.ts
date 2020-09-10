@@ -5,13 +5,29 @@ import { ITodoDto } from '../interfaces/todo';
 
 const getTodos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const reqData: ITodoDto = req.body;
-    const results = await ITodo.findById(reqData.id);
+    const results = await ITodo.findById(req.params.id);
     if (results) res.status(200).json(results);
 
     res.status(400).json({
       status: 'sucess',
       message: `Item with id ${req.body.id} not found`
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'failed',
+      message: err.message
+    });
+  }
+};
+
+const getAllTodos = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const results = await ITodo.find({});
+    if (results) res.status(200).json(results);
+
+    res.status(400).json({
+      status: 'sucess',
+      message: 'No items not found'
     });
   } catch (err) {
     res.status(400).json({
@@ -42,14 +58,14 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
 const updateTodos = async (req: Request, res: Response): Promise<void> => {
   try {
     const reqData: ITodoDto = req.body;
-    const todo = await ITodo.findById(reqData.id);
+    const todo = await ITodo.findById(req.params.id);
     if (!todo) {
       res.status(400).json({
         status: 'failed',
         message: 'This todo item could not be found.'
       });
     } else {
-      todo.description = req.body.description;
+      todo.description = reqData.description;
       await todo.save();
       res.status(200).json({
         status: 'sucess',
@@ -66,8 +82,7 @@ const updateTodos = async (req: Request, res: Response): Promise<void> => {
 
 const deleteTodo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const reqData: ITodoDto = req.body;
-    await ITodo.findByIdAndDelete(reqData.id);
+    await ITodo.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
       status: 'sucess',
@@ -81,4 +96,4 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getTodos, createTodo, updateTodos, deleteTodo };
+export { getTodos, createTodo, updateTodos, deleteTodo, getAllTodos };
