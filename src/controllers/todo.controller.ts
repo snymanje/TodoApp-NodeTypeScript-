@@ -6,12 +6,14 @@ import { ITodoDto } from '../interfaces/todo';
 const getTodos = async (req: Request, res: Response): Promise<void> => {
   try {
     const results = await ITodo.findById(req.params.id);
-    if (results) res.status(200).json(results);
+    if (!results) {
+      res.status(400).json({
+        status: 'sucess',
+        message: `Item with id ${req.body.id} not found`
+      });
+    }
 
-    res.status(400).json({
-      status: 'sucess',
-      message: `Item with id ${req.body.id} not found`
-    });
+    res.status(200).json(results);
   } catch (err) {
     res.status(400).json({
       status: 'failed',
@@ -23,12 +25,13 @@ const getTodos = async (req: Request, res: Response): Promise<void> => {
 const getAllTodos = async (req: Request, res: Response): Promise<void> => {
   try {
     const results = await ITodo.find({});
-    if (results) res.status(200).json(results);
-
-    res.status(400).json({
-      status: 'sucess',
-      message: 'No items not found'
-    });
+    if (!results) {
+      res.status(400).json({
+        status: 'sucess',
+        message: 'No items not found'
+      });
+    }
+    res.status(200).json(results);
   } catch (err) {
     res.status(400).json({
       status: 'failed',
